@@ -2,7 +2,7 @@ version: '2'
 
 services:
   elasticsearch:
-    image: elasticsearch:2.4
+    image: elasticsearch
     build: elasticsearch/
     ports:
       - "9200:9200"
@@ -13,7 +13,7 @@ services:
       - docker_elk
   logstash:
     build: logstash/
-    command: -f /etc/logstash/conf.d/
+    command: -f /etc/logstash/conf.d/ -w 8
     volumes:
       - ./logstash/config:/etc/logstash/conf.d
     ports:
