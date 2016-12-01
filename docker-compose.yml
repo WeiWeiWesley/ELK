@@ -2,6 +2,7 @@ version: '2'
 
 services:
   elasticsearch:
+    image: elasticsearch:2.4
     build: elasticsearch/
     ports:
       - "9200:9200"
@@ -17,6 +18,7 @@ services:
       - ./logstash/config:/etc/logstash/conf.d
     ports:
       - "5000:5000"
+      - "5001:5001"
     networks:
       - docker_elk
     depends_on:
