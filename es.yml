@@ -1,0 +1,10 @@
+version: '2'
+
+services:
+  elasticsearch2:
+  build: elasticsearch/
+  ports:
+    - "9222:9222"
+    - "9333:9333"
+  environment:
+    ES_JAVA_OPTS: "-Xms1g -Xmx1g"
