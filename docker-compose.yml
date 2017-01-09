@@ -22,6 +22,8 @@ services:
       ES_JAVA_OPTS: "-Xms1g -Xmx1g"
     networks:
       - docker_elk
+    depends_on:
+      - elasticsearch
 
   logstash:
     build: logstash/
@@ -36,24 +38,12 @@ services:
       - docker_elk
     depends_on:
       - elasticsearch
-  logstash2:
-    build: logstash/
-    container_name: sub_logstash
-    command: -f /etc/logstash/conf.d/ -w 8
-    volumes:
-      - ./logstash/config:/etc/logstash/conf.d
-    ports:
-      - "5002:5002"
-      - "5003:5003"
-    networks:
-      - docker_elk
-    depends_on:
-      - elasticsearch
 
   kibana:
     build: kibana/
     volumes:
       - ./kibana/config/:/opt/kibana/config/
+      - ./kibana/plugin/:/opt/kibana/plugin/
     ports:
       - "5601:5601"
     networks:
