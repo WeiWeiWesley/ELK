@@ -1,0 +1,17 @@
+version: '2'
+services:
+  logstash:
+    build: logstash/
+    container_name: main_logstash
+    command: -f /etc/logstash/conf.d/ -w 8
+    volumes:
+      - ./logstash/config:/etc/logstash/conf.d
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+    networks:
+      - docker_elk
+
+networks:
+  docker_elk:
+    driver: bridge
