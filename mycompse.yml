@@ -12,6 +12,17 @@ services:
     networks:
       - docker_elk
 
+  elasticsearch:
+    build: elasticsearch/
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    command: elasticsearch -E node.name="es1" -E cluster.name="mycluster" -E discovery.zen.ping.unicast.hosts="192.168.154.93"
+    environment:
+      ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+    networks:
+      - docker_elk
+
 networks:
   docker_elk:
     driver: bridge
