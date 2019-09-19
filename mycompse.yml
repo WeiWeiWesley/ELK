@@ -3,6 +3,10 @@ services:
   logstash:
     build: logstash/
     container_name: main_logstash
+    environment:
+      - TZ=Asia/Taipei
+      - xpack.monitoring.enabled=true
+      - xpack.monitoring.elasticsearch.url=elasticsearch:9200
     command: -f /etc/logstash/conf.d/ -w 8
     volumes:
       - ./logstash/config:/etc/logstash/conf.d
@@ -17,9 +21,22 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
-    command: elasticsearch -E node.name="es1" -E cluster.name="mycluster" -E discovery.zen.ping.unicast.hosts="192.168.154.93"
     environment:
-      ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+      - TZ=Asia/Taipei
+      - cluster.name=docker-cluster
+      - http.host=0.0.0.0
+      - http.port=9200
+      - transport.host=127.0.0.1
+      - node.name=es01
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+      - "http.cors.allow-headers=X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization"
+      - "http.cors.allow-credentials=true"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile: 65536
     networks:
       - docker_elk
 
