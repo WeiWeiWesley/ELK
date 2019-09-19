@@ -1,21 +1,6 @@
 version: '2'
-services:
-  logstash:
-    build: logstash/
-    container_name: main_logstash
-    environment:
-      - TZ=Asia/Taipei
-      - xpack.monitoring.enabled=true
-      - xpack.monitoring.elasticsearch.url=elasticsearch:9200
-    command: -f /etc/logstash/conf.d/ -w 8
-    volumes:
-      - ./logstash/config:/etc/logstash/conf.d
-    ports:
-      - "5000:5000"
-      - "5001:5001"
-    networks:
-      - docker_elk
 
+services:
   elasticsearch:
     build: elasticsearch/
     ports:
@@ -39,6 +24,37 @@ services:
       nofile: 65536
     networks:
       - docker_elk
+
+  logstash:
+    build: logstash/
+    container_name: main_logstash
+    environment:
+      - TZ=Asia/Taipei
+      - xpack.monitoring.enabled=true
+      - xpack.monitoring.elasticsearch.url=elasticsearch:9200
+    command: -f /etc/logstash/conf.d/ -w 8
+    volumes:
+      - ./logstash/config:/etc/logstash/conf.d
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+    networks:
+      - docker_elk
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    build: kibana/
+    environment:
+      - http.host=0.0.0.0
+      - server.name=kibana
+      - elasticsearch.url=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    networks:
+      - docker_elk
+    depends_on:
+      - elasticsearch
 
 networks:
   docker_elk:
