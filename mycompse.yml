@@ -22,6 +22,8 @@ services:
         soft: -1
         hard: -1
       nofile: 65536
+    volumes:
+      - storage:/usr/share/elasticsearch/data
     networks:
       - docker_elk
 
@@ -55,6 +57,10 @@ services:
       - docker_elk
     depends_on:
       - elasticsearch
+
+volumes:
+    storage:
+        driver: local
 
 networks:
   docker_elk:
