@@ -2,7 +2,7 @@ version: '2'
 
 services:
   elasticsearch:
-    build: elasticsearch/
+    image: elasticsearch:7.3.2
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -14,7 +14,8 @@ services:
       - transport.host=127.0.0.1
       - node.name=es01
       - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Des.path.conf=/etc/elasticsearch"
       - "http.cors.allow-headers=X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization"
       - "http.cors.allow-credentials=true"
     ulimits:
@@ -46,7 +47,7 @@ services:
       - elasticsearch
 
   kibana:
-    build: kibana/
+    image: kibana:7.3.2
     environment:
       - http.host=0.0.0.0
       - server.name=kibana
