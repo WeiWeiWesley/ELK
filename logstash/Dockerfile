@@ -8,4 +8,5 @@ RUN logstash-plugin install logstash-filter-json
 RUN logstash-plugin install logstash-filter-grok
 RUN logstash-plugin install logstash-filter-mutate
 RUN logstash-plugin install logstash-filter-date
+RUN logstash-plugin install logstash-filter-sleep
 RUN logstash-plugin install logstash-output-stdout
