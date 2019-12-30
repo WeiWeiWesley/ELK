@@ -28,12 +28,12 @@ docker-compose up
 # logstash.conf
 
 input {
-	redis {
-		data_type => "list"
-		key => "wesley"            //This key is what you RPUSH to redis
-		host => "pepper_redis_1"   //Your redis's host
-		port => "6379"
-    	id => "test_1"
+    redis {
+        data_type => "list"
+        key => "wesley"            //This key is what you RPUSH to redis
+        host => "pepper_redis_1"   //Your redis's host
+        port => "6379"
+        id => "test_1"
     }
 }
 
