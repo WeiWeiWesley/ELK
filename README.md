@@ -34,7 +34,7 @@ input {
 		host => "pepper_redis_1"   //Your redis's host
 		port => "6379"
     	id => "test_1"
-  	}
+    }
 }
 
 filter {
