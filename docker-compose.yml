@@ -12,6 +12,10 @@ services:
       - http.host=0.0.0.0
       - http.port=9200
       - transport.host=127.0.0.1
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+
     ulimits:
       memlock:
         soft: -1
@@ -42,7 +46,7 @@ services:
     container_name: kibana
     image: kibana:7.3.2
     environment:
-      - xpack.monitoring.ui.container.elasticsearch.enabled=true
+      - xpack.monitoring.ui.container.elasticsearch.enabled=false
     volumes:
       - ./kibana/config:/usr/share/kibana/config
     ports:
@@ -50,7 +54,7 @@ services:
     networks:
       - docker_elk
     depends_on:
-      - logstash
+      - elasticsearch
 
 volumes:
     storage:
