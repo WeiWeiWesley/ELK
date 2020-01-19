@@ -1,6 +1,24 @@
 version: '2'
 
 services:
+  redisA:
+    container_name: redisA
+    image: redis
+    restart: always
+    ports:
+        - "6380:6379"
+    networks:
+        - docker_elk
+
+  redisB:
+    container_name: redisB
+    image: redis
+    restart: always
+    ports:
+        - "6381:6379"
+    networks:
+        - docker_elk
+
   elasticsearch:
     container_name: elasticsearch
     image: elasticsearch:7.3.2
