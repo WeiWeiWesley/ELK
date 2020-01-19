@@ -20,6 +20,10 @@ Start
 docker-compose up
 ```
 
+Open Kibana
+
+http://127.0.0.1:5601
+
 ## Configreation
 * [docker-compose.yml](https://github.com/WeiWeiWesley/ELK/blob/master/docker-compose.yml)
 * [logstash.conf](https://github.com/WeiWeiWesley/ELK/blob/master/logstash/config/logstash.conf)
@@ -28,30 +32,50 @@ docker-compose up
 # logstash.conf
 
 input {
-    redis {
-        data_type => "list"
-        key => "wesley"            //This key is what you RPUSH to redis
-        host => "pepper_redis_1"   //Your redis's host
-        port => "6379"
-        id => "test_1"
-    }
+	redis {
+		data_type => "list"
+		key => "ios_key"
+		host => "redisA"
+		port => "6379"
+		id => "ios"
+		tags => ["ios", "example"]
+	}
+
+	redis {
+		data_type => "list"
+		key => "android_key"
+		host => "redisB"
+		port => "6379"
+		id => "android"
+		tags => ["android", "example"]
+	}
 }
 
 filter {
-	sleep {
-        time => "1"   # Sleep 1 second
-        every => 10   # on every 10th event
-	}
-
-	json {
-        source => "message"
+	if "example" in [tags] {
+		json {
+			source => "message"
+		}
 	}
 }
 
 output {
-	elasticsearch {
-		index => "wesley-%{+YYYY.MM.dd}" //Index pattern
-		hosts => ["elasticsearch:9200"]
+	if "_jsonparsefailure" not in [tags] {
+		if "ios" in [tags] {
+			elasticsearch {
+				index => "ios-%{+YYYY.MM.dd}"
+				hosts => ["elasticsearch:9200"]
+			}
+		}
+
+		if "android" in [tags] {
+			elasticsearch {
+				index => "android-%{+YYYY.MM.dd}"
+				hosts => ["elasticsearch:9200"]
+			}
+		}
 	}
+
 }
+
 ```
